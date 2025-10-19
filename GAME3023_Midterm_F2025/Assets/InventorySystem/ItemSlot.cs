@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 //Holds reference and count of items, manages their visibility in the Inventory panel
-public class ItemSlot : MonoBehaviour
+public class ItemSlot : MonoBehaviour, IBeginDragHandler
 {
     public Item item = null;
 
@@ -25,6 +25,12 @@ public class ItemSlot : MonoBehaviour
 
     [SerializeField]
     TextMeshProUGUI itemCountText;
+
+    private Canvas canvas;
+    private RectTransform rectTransform;
+    private CanvasGroup canvasGroup;
+    private Transform originalParent;
+    private Vector2 originalPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -68,4 +74,15 @@ public class ItemSlot : MonoBehaviour
     {
         return (item != null && count > 0);
     }
-}
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (item == null) return;
+        originalParent = transform.parent;
+        originalPosition = rectTransform.anchoredPosition;
+
+        transform.SetParent(canvas.transform, true);
+        canvasGroup.blocksRaycasts = false;
+    }
+ }
+
