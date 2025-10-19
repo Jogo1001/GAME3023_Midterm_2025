@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 //Holds reference and count of items, manages their visibility in the Inventory panel
-public class ItemSlot : MonoBehaviour, IBeginDragHandler
+public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
     public Item item = null;
 
@@ -84,5 +84,11 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler
         transform.SetParent(canvas.transform, true);
         canvasGroup.blocksRaycasts = false;
     }
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (item == null) return;
+        rectTransform.position = eventData.position;
+    }
+
  }
 
