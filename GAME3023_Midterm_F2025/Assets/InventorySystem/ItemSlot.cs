@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 //Holds reference and count of items, manages their visibility in the Inventory panel
-public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler
+public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     public Item item = null;
 
@@ -33,6 +33,13 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler
     private Vector2 originalPosition;
 
     // Start is called before the first frame update
+
+    void Awake()
+    {
+        rectTransform = GetComponent<RectTransform>();
+        canvas = GetComponentInParent<Canvas>();
+        canvasGroup = gameObject.AddComponent<CanvasGroup>();
+    }
     void Start()
     {
         UpdateGraphic();
@@ -89,6 +96,29 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler
         if (item == null) return;
         rectTransform.position = eventData.position;
     }
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        canvasGroup.blocksRaycasts = true;
+        rectTransform.SetParent(originalParent, true);
+        rectTransform.anchoredPosition = originalPosition; // reset position
+    }
+    public void OnDrop(PointerEventData eventData)
+    {
+        var draggedSlot = eventData.pointerDrag?.GetComponent<ItemSlot>();
+        if (draggedSlot == null || draggedSlot == this) return;
 
- }
+        // swap items
+        Item tempItem = item;
+        int tempCount = count;
+
+        item = draggedSlot.item;
+        count = draggedSlot.count;
+
+        draggedSlot.item = tempItem;
+        draggedSlot.count = tempCount;
+
+        UpdateGraphic();
+        draggedSlot.UpdateGraphic();
+    }
+}
 
