@@ -3,28 +3,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-//Holds reference and count of items, manages their visibility in the Inventory panel
 public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     public Item item = null;
+    public int count = 0;
 
-    [SerializeField]
-    private int count = 0;
-    public int Count
-    {
-        get { return count; }
-        set
-        {
-            count = value;
-            UpdateGraphic();
-        }
-    }
-
-    [SerializeField]
-    Image itemIcon;
-
-    [SerializeField]
-    TextMeshProUGUI itemCountText;
+    [SerializeField] Image itemIcon;
+    [SerializeField] TextMeshProUGUI itemCountText;
 
     private Canvas canvas;
     private RectTransform rectTransform;
@@ -32,55 +17,39 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private Transform originalParent;
     private Vector2 originalPosition;
 
-    // Start is called before the first frame update
-
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
         canvasGroup = gameObject.AddComponent<CanvasGroup>();
     }
-    void Start()
-    {
-        UpdateGraphic();
-    }
 
-    //Change Icon and count
+    void Start() => UpdateGraphic();
+
     void UpdateGraphic()
     {
-        if (count < 1 || item == null)
+        bool hasItem = item != null && count > 0;
+        itemIcon.gameObject.SetActive(hasItem);
+        itemCountText.gameObject.SetActive(hasItem);
+
+        if (hasItem)
         {
-            count = 0;
-            item = null;
-            itemIcon.gameObject.SetActive(false);
-            itemCountText.gameObject.SetActive(false);
-        }
-        else
-        {
-            //set sprite to the one from the item
             itemIcon.sprite = item.icon;
-            itemIcon.gameObject.SetActive(true);
-            itemCountText.gameObject.SetActive(true);
             itemCountText.text = count.ToString();
         }
     }
 
     public void UseItemInSlot()
     {
-        if (CanUseItem())
+        if (item != null && count > 0)
         {
             item.Use();
-            if (item.isConsumable)
-            {
-                Count--;
-            }
+            if (item.isConsumable) count--;
+            UpdateGraphic();
         }
     }
 
-    private bool CanUseItem()
-    {
-        return (item != null && count > 0);
-    }
+    // === DRAG & DROP ===
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -89,19 +58,22 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         originalPosition = rectTransform.anchoredPosition;
 
         transform.SetParent(canvas.transform, true);
-        canvasGroup.blocksRaycasts = false;
+        canvasGroup.blocksRaycasts = false; // allow dropping
     }
+
     public void OnDrag(PointerEventData eventData)
     {
         if (item == null) return;
-        rectTransform.position = eventData.position;
+        rectTransform.position = eventData.position; // follow mouse
     }
+
     public void OnEndDrag(PointerEventData eventData)
     {
         canvasGroup.blocksRaycasts = true;
         rectTransform.SetParent(originalParent, true);
         rectTransform.anchoredPosition = originalPosition; // reset position
     }
+
     public void OnDrop(PointerEventData eventData)
     {
         var draggedSlot = eventData.pointerDrag?.GetComponent<ItemSlot>();
@@ -121,4 +93,3 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         draggedSlot.UpdateGraphic();
     }
 }
-
