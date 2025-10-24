@@ -10,12 +10,16 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     [SerializeField] Image itemIcon;
     [SerializeField] TextMeshProUGUI itemCountText;
+    [SerializeField] TextMeshProUGUI statText;
 
     private Canvas canvas;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private Transform originalParent;
     private Vector2 originalPosition;
+
+    public int playerStat = 0;
+    public int AddStats = 0;
 
     void Awake()
     {
@@ -38,11 +42,22 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             itemCountText.text = count.ToString();
         }
     }
+    void UpdateStatText()
+    {
+        if (statText != null)
+            statText.text = "" + playerStat;
+    }
 
     public void UseItemInSlot()
     {
         if (item != null && count > 0)
         {
+
+            playerStat += AddStats;
+            UpdateStatText();
+
+           
+
             item.Use();
             if (item.isConsumable) count--;
             UpdateGraphic();
