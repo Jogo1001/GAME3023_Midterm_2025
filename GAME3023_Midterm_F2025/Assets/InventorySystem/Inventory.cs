@@ -9,8 +9,8 @@ public class Inventory : MonoBehaviour
     [SerializeField] private GameObject inventoryPanel; 
     [SerializeField] private int columns = 6;
     [SerializeField] private int rows = 5;
-    [SerializeField] private float cellSize = 80f;
-    [SerializeField] private float spacing = 5f;
+    [SerializeField] public float cellSize = 32f;
+    [SerializeField] public float spacing = 0f;
 
     private List<ItemSlot> itemSlots = new();
     private RectTransform gridRect;

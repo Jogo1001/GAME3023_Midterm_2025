@@ -18,6 +18,10 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private Transform originalParent;
     private Vector2 originalPosition;
 
+
+    public bool isCoveredSlot = false;
+
+
     public int playerStat = 0;
     public int AddStats = 0;
 
@@ -33,6 +37,14 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     void UpdateGraphic()
     {
         bool hasItem = item != null && count > 0;
+
+        if (isCoveredSlot)
+        {
+            itemIcon.gameObject.SetActive(false); // don't show icon
+            itemCountText.gameObject.SetActive(false);
+            return;
+        }
+
         itemIcon.gameObject.SetActive(hasItem);
         itemCountText.gameObject.SetActive(hasItem);
 
@@ -40,8 +52,14 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         {
             itemIcon.sprite = item.icon;
             itemCountText.text = count.ToString();
+            StretchIcon(item.width, item.height);
+        }
+        else
+        {
+            ResetIcon();
         }
     }
+
     void UpdateStatText()
     {
         if (statText != null)
@@ -107,5 +125,37 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         UpdateGraphic();
         draggedSlot.UpdateGraphic();
     }
+    private void StretchIcon(int widthCells, int heightCells)
+    {
+        float cellSize = 32f;
+        float spacing = 0f;
+
+        float w = widthCells * (cellSize + spacing) - spacing;
+        float h = heightCells * (cellSize + spacing) - spacing;
+
+        RectTransform iconRect = itemIcon.rectTransform;
+
+        // Anchor to bottom-right
+        iconRect.anchorMin = new Vector2(1, 0);
+        iconRect.anchorMax = new Vector2(1, 0);
+        iconRect.pivot = new Vector2(1, 0);
+        iconRect.anchoredPosition = Vector2.zero;
+        iconRect.sizeDelta = new Vector2(w, h);
+    }
+
+
+
+    private void ResetIcon()
+    {
+        RectTransform iconRect = itemIcon.rectTransform;
+
+        // Anchor to bottom-right
+        iconRect.anchorMin = new Vector2(1, 0);
+        iconRect.anchorMax = new Vector2(1, 0);
+        iconRect.pivot = new Vector2(1, 0);
+        iconRect.anchoredPosition = Vector2.zero;
+        iconRect.sizeDelta = new Vector2(80f, 80f);
+    }
+
 
 }
