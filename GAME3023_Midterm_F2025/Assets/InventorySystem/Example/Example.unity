@@ -1238,6 +1238,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3429609245822917952, guid: 50147ce332354bc45a153732d66a7273, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3429609245822917952, guid: 50147ce332354bc45a153732d66a7273, type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3429609245822917952, guid: 50147ce332354bc45a153732d66a7273, type: 3}
+      propertyPath: m_Padding.m_Right
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 3429609245842512862, guid: 50147ce332354bc45a153732d66a7273, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -2154,6 +2166,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6007753525704975601, guid: 50147ce332354bc45a153732d66a7273, type: 3}
+      propertyPath: rows
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007753525704975601, guid: 50147ce332354bc45a153732d66a7273, type: 3}
+      propertyPath: columns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007753525704975601, guid: 50147ce332354bc45a153732d66a7273, type: 3}
+      propertyPath: spacing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007753525704975601, guid: 50147ce332354bc45a153732d66a7273, type: 3}
+      propertyPath: cellSize
+      value: 32
+      objectReference: {fileID: 0}
     - target: {fileID: 6041322678186335716, guid: 50147ce332354bc45a153732d66a7273, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2938,7 +2966,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4332230126190899827, guid: 50147ce332354bc45a153732d66a7273, type: 3}
       insertIndex: 2
       addedObject: {fileID: 623104584}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3729631561805670620, guid: 50147ce332354bc45a153732d66a7273, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1390945729}
   m_SourcePrefab: {fileID: 100100000, guid: 50147ce332354bc45a153732d66a7273, type: 3}
 --- !u!224 &1069850721 stripped
 RectTransform:
@@ -2950,6 +2981,39 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3429609245842512863, guid: 50147ce332354bc45a153732d66a7273, type: 3}
   m_PrefabInstance: {fileID: 1069850720}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1390945723 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3729631561805670620, guid: 50147ce332354bc45a153732d66a7273, type: 3}
+  m_PrefabInstance: {fileID: 1069850720}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1390945729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390945723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84662164c5e07bb4d9b2e108debc511d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryGridHandler
+  columns: 20
+  rows: 20
+  cellSize: 200
+  spacing: 20
+  highlightColor:
+    r: 1
+    g: 1
+    b: 1
+    a: 0.15
+  blockedColor:
+    r: 1
+    g: 0
+    b: 0
+    a: 0.2
+  rect: {fileID: 0}
+  slots: []
 --- !u!1 &1393358666
 GameObject:
   m_ObjectHideFlags: 0
