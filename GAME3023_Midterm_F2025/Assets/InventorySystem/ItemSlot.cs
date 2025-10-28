@@ -107,4 +107,5 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         UpdateGraphic();
         draggedSlot.UpdateGraphic();
     }
+
 }

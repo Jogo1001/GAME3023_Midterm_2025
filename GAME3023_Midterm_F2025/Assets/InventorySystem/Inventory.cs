@@ -34,4 +34,68 @@ public class Inventory : MonoBehaviour
             grid.constraintCount = columns;
         }
     }
+    public Vector2Int GetGridPosition(Vector2 screenPos)
+    {
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            gridRect, screenPos, null, out Vector2 local
+        );
+
+        float step = cellSize + spacing;
+        float startX = -((columns - 1) * step) / 2f;
+        float startY = ((rows - 1) * step) / 2f;
+
+        int x = Mathf.RoundToInt((local.x - startX) / step);
+        int y = Mathf.RoundToInt((startY - local.y) / step);
+
+        return new Vector2Int(
+            Mathf.Clamp(x, 0, columns - 1),
+            Mathf.Clamp(y, 0, rows - 1)
+        );
+    }
+    public bool CanPlaceItem(Item item, Vector2Int topLeft)
+    {
+        if (item == null) return false;
+
+        for (int y = 0; y < item.height; y++)
+        {
+            for (int x = 0; x < item.width; x++)
+            {
+                int gx = topLeft.x + x;
+                int gy = topLeft.y + y;
+
+             
+                if (gx >= columns || gy >= rows)
+                    return false;
+
+             
+                int index = gy * columns + gx;
+                if (index < itemSlots.Count && itemSlots[index].item != null)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+    public void PlaceItem(Item item, Vector2Int topLeft, int count)
+    {
+        if (!CanPlaceItem(item, topLeft)) return;
+
+        for (int y = 0; y < item.height; y++)
+        {
+            for (int x = 0; x < item.width; x++)
+            {
+                int gx = topLeft.x + x;
+                int gy = topLeft.y + y;
+                int index = gy * columns + gx;
+
+                if (index < itemSlots.Count)
+                {
+                    ItemSlot slot = itemSlots[index];
+                    slot.item = item;
+                    slot.count = count;
+                    slot.SendMessage("UpdateGraphic", SendMessageOptions.DontRequireReceiver);
+                }
+            }
+        }
+    }
 }
