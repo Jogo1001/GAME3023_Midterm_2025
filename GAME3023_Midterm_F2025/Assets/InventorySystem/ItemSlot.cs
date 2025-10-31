@@ -14,15 +14,15 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [SerializeField] private TextMeshProUGUI itemCountText;
     [SerializeField] private TextMeshProUGUI statText;
 
-    [Header("Player Stats")]
-    public int playerStat = 0;
-    public int addStats = 0;
-
     [Header("Slot Settings")]
     public bool isCoveredSlot = false;
     public ItemSlot linkedSlot;
 
-    // Internal references
+    [Header("Player Stats")]
+    public int playerStat = 0;
+    public int AddStats = 0;
+
+    // references
     private Canvas canvas;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
@@ -38,22 +38,20 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     private void Start()
     {
-        UpdateUI();
-        UpdateStatText();
+        UpdateGraphic();
     }
 
-    #region UI Updates
-
-    private void UpdateUI()
+    //UI Updates
+    void UpdateGraphic()
     {
+        bool hasItem = item != null && count > 0;
+
         if (isCoveredSlot)
         {
             itemIcon.gameObject.SetActive(false);
             itemCountText.gameObject.SetActive(false);
             return;
         }
-
-        bool hasItem = item != null && count > 0;
 
         itemIcon.gameObject.SetActive(hasItem);
         itemCountText.gameObject.SetActive(hasItem);
@@ -70,61 +68,30 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
     }
 
-    private void UpdateStatText()
+    void UpdateStatText()
     {
         if (statText != null)
             statText.text = playerStat.ToString();
     }
 
-    private void StretchIcon(int widthCells, int heightCells)
+    //Item Usage
+    public void UseItemInSlot()
     {
-        float cellSize = 32f;
-        float spacing = 0f;
+        if (item != null && count > 0)
+        {
+            playerStat += AddStats;
+            UpdateStatText();
 
-        float width = widthCells * (cellSize + spacing) - spacing;
-        float height = heightCells * (cellSize + spacing) - spacing;
+            item.Use();
 
-        RectTransform iconRect = itemIcon.rectTransform;
-        iconRect.anchorMin = new Vector2(1, 0);
-        iconRect.anchorMax = new Vector2(1, 0);
-        iconRect.pivot = new Vector2(1, 0);
-        iconRect.anchoredPosition = Vector2.zero;
-        iconRect.sizeDelta = new Vector2(width, height);
+            if (item.isConsumable)
+                count--;
+
+            UpdateGraphic();
+        }
     }
 
-    private void ResetIcon()
-    {
-        RectTransform iconRect = itemIcon.rectTransform;
-        iconRect.anchorMin = new Vector2(1, 0);
-        iconRect.anchorMax = new Vector2(1, 0);
-        iconRect.pivot = new Vector2(1, 0);
-        iconRect.anchoredPosition = Vector2.zero;
-        iconRect.sizeDelta = new Vector2(80f, 80f);
-    }
-
-    #endregion
-
-    #region Item Usage
-
-    public void UseItem()
-    {
-        if (item == null || count <= 0) return;
-
-        playerStat += addStats;
-        UpdateStatText();
-
-        item.Use();
-
-        if (item.isConsumable)
-            count--;
-
-        UpdateUI();
-    }
-
-    #endregion
-
-    #region Drag & Drop
-
+    //  DRAG & DROP
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (item == null) return;
@@ -164,7 +131,8 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if (linkedSlot != null)
         {
             linkedSlot.transform.SetParent(transform.parent, false);
-            linkedSlot.transform.SetSiblingIndex(transform.GetSiblingIndex());
+            int mainIndex = transform.GetSiblingIndex();
+            linkedSlot.transform.SetSiblingIndex(mainIndex);
             linkedSlot.rectTransform.anchoredPosition = linkedSlot.originalPosition;
         }
     }
@@ -174,17 +142,43 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         var draggedSlot = eventData.pointerDrag?.GetComponent<ItemSlot>();
         if (draggedSlot == null || draggedSlot == this) return;
 
-        SwapItems(draggedSlot);
+        Item tempItem = item;
+        int tempCount = count;
+
+        item = draggedSlot.item;
+        count = draggedSlot.count;
+
+        draggedSlot.item = tempItem;
+        draggedSlot.count = tempCount;
+
+        UpdateGraphic();
+        draggedSlot.UpdateGraphic();
     }
 
-    private void SwapItems(ItemSlot other)
+    //ICON MANAGEMENT
+    private void StretchIcon(int widthCells, int heightCells)
     {
-        (item, other.item) = (other.item, item);
-        (count, other.count) = (other.count, count);
+        float cellSize = 32f;
+        float spacing = 0f;
 
-        UpdateUI();
-        other.UpdateUI();
+        float w = widthCells * (cellSize + spacing) - spacing;
+        float h = heightCells * (cellSize + spacing) - spacing;
+
+        RectTransform iconRect = itemIcon.rectTransform;
+        iconRect.anchorMin = new Vector2(1, 0);
+        iconRect.anchorMax = new Vector2(1, 0);
+        iconRect.pivot = new Vector2(1, 0);
+        iconRect.anchoredPosition = Vector2.zero;
+        iconRect.sizeDelta = new Vector2(w, h);
     }
 
-    #endregion
+    private void ResetIcon()
+    {
+        RectTransform iconRect = itemIcon.rectTransform;
+        iconRect.anchorMin = new Vector2(1, 0);
+        iconRect.anchorMax = new Vector2(1, 0);
+        iconRect.pivot = new Vector2(1, 0);
+        iconRect.anchoredPosition = Vector2.zero;
+        iconRect.sizeDelta = new Vector2(80f, 80f);
+    }
 }
