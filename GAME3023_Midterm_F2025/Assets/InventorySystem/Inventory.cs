@@ -15,6 +15,8 @@ public class Inventory : MonoBehaviour
     private List<ItemSlot> itemSlots = new();
     private RectTransform gridRect;
 
+
+
     void Start()
     {
         itemSlots = new List<ItemSlot>(
@@ -76,6 +78,7 @@ public class Inventory : MonoBehaviour
 
         return true;
     }
+
     public void PlaceItem(Item item, Vector2Int topLeft, int count)
     {
         if (!CanPlaceItem(item, topLeft)) return;
@@ -93,9 +96,11 @@ public class Inventory : MonoBehaviour
                     ItemSlot slot = itemSlots[index];
                     slot.item = item;
                     slot.count = count;
+                    slot.isCoveredSlot = !(x == 0 && y == 0);
                     slot.SendMessage("UpdateGraphic", SendMessageOptions.DontRequireReceiver);
                 }
             }
         }
     }
+
 }
