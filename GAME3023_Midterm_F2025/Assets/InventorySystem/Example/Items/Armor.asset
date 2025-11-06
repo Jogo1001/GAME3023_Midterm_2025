@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Armor
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: d69feee3c68fb424cb85b033028074e0, type: 3}
-  description: Armor
+  description: The breastplate is made from many layers of pointed metal sheets.
   isConsumable: 0
   width: 2
   height: 2

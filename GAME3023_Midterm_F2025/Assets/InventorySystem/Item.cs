@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 //Attribute which allows right click->Create
@@ -12,8 +13,17 @@ public class Item : ScriptableObject //Extending SO allows us to have an object 
     public int width = 1;
     public int height = 1;
 
-    public void Use()
+    /*    public void Use()
+        {
+            Debug.Log("Used item: " + name + " - " + description);
+        }*/
+    public void Use(TextMeshProUGUI nameText, TextMeshProUGUI descriptionText)
     {
-        Debug.Log("Used item: " + name + " - " + description);
+        if (nameText != null)
+            nameText.text = name;
+
+        if (descriptionText != null)
+            descriptionText.text = description;
     }
+
 }

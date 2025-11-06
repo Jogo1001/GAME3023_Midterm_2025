@@ -28,6 +28,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private CanvasGroup canvasGroup;
     private Transform originalParent;
     private Vector2 originalPosition;
+    private Inventory inventory;
 
     private void Awake()
     {
@@ -38,6 +39,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     private void Start()
     {
+        inventory = GetComponentInParent<Inventory>();
         UpdateGraphic();
     }
 
@@ -82,7 +84,9 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             playerStat += AddStats;
             UpdateStatText();
 
-            item.Use();
+            /* item.Use();*/
+            if (inventory != null)
+                item.Use(inventory.itemNameText, inventory.itemDescriptionText);
 
             if (item.isConsumable)
                 count--;

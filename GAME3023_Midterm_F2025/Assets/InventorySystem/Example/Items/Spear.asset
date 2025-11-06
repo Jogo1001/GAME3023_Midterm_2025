@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Spear
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: d778783eb0ef17c4086f92f343e1a6bf, type: 3}
-  description: Spear
+  description: A traditional spear forged for battle and hunting alike.
   isConsumable: 0
   width: 2
   height: 2

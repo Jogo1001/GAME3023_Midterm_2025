@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Shield
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 65ad48dcd8ec8f14286c55e9aa25a5c1, type: 3}
-  description: Shield
+  description: A sturdy shield built to block incoming attacks.
   isConsumable: 0
   width: 2
   height: 2

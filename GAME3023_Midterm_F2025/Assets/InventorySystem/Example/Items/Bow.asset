@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bow
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: b94675bb0ec166a47a9c094b6d798340, type: 3}
-  description: Bow
+  description: A finely crafted bow designed for accuracy and power.
   isConsumable: 0
   width: 2
   height: 2

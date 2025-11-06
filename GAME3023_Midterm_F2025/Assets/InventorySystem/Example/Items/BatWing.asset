@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: BatWing
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: fb9d0eff353839b4c82829f8d32fd9c0, type: 3}
-  description: BatWing
+  description: Grants the wearer enhanced agility and the power to glide silently
+    through the night.
   isConsumable: 0
   width: 2
   height: 2
